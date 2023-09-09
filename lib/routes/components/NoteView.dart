@@ -5,8 +5,8 @@ class NoteView extends StatelessWidget {
   String description;
   int id;
   NoteView (this.id,this.title,this.description){
-        super.key;
-      }
+    super.key;
+  }
 
   @override
   Widget build(BuildContext context) {

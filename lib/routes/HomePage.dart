@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget{
         child: GridView.count(
           crossAxisCount:2,
           childAspectRatio: 795/500,
-          children: List.generate(5, (index) => NoteView(index+1,"Running at 5A.M.","assxjnkdmnjckwm dcwnjsck mcsdc")),
+          children: List.generate(5, (index) => NoteView(index+1,"Running at 5A.M.","assxjnkdmnjckwmdcwnjsckmcsdc")),
         ),
       ),
       floatingActionButton: FloatingActionButton(
