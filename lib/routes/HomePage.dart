@@ -1,10 +1,44 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
+import 'package:todoapp/helper/DBHelper.dart';
 import 'package:todoapp/routes/components/NoteView.dart';
+DBHelper db = DBHelper();
+class HomePage extends StatefulWidget{
 
-class HomePage extends StatelessWidget{
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return HomePageState();
+  }
+  
+}
+class HomePageState extends State<HomePage>{
+  List<Map<String,dynamic>>? allnotes = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAllnotes();
 
-  HomePage();
+  }
+  getAllnotes(){
+    db.init().then((value){
+      db.queryAllNotes().then((value) {
+        setState(() {
+          allnotes = value;
+          print(allnotes);
+        });
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    db.close();
+    super.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -14,12 +48,14 @@ class HomePage extends StatelessWidget{
         child: GridView.count(
           crossAxisCount:2,
           childAspectRatio: 795/500,
-          children: List.generate(5, (index) => NoteView(index+1,"Running at 5A.M.","assxjnkdmnjckwmdcwnjsckmcsdc")),
+          children: List.generate(allnotes!.length, (index){
+            return NoteView(index+1, allnotes![index],()=>Navigator.pushNamed(context, "/note",arguments: allnotes![index]).then((value) => getAllnotes()));
+          } )
         ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Text("New"),
-        onPressed: () { Navigator.pushNamed(context, "/new"); },
+        onPressed: () { Navigator.pushNamed(context, "/new").then((value) => getAllnotes()); },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );

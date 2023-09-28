@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/routes/HomePage.dart';
+import 'package:todoapp/routes/MyNotePage.dart';
 import 'package:todoapp/routes/NewNotePage.dart';
 
 void main(){
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget{
         initialRoute: "/",
         routes: {
           "/":(context)=>HomePage(),
-          "/new":(context)=>NewNotePage()
+          "/new":(context)=>NewNotePage(),
+          "/note":(contex)=>MyNotePage()
         },
       ),
     );

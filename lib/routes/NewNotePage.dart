@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/Model/NoteModel.dart';
+import 'package:todoapp/helper/DBHelper.dart';
+DBHelper db = DBHelper();
 class NewNotePage extends StatefulWidget{
-
   @override
   State<NewNotePage> createState() {
     return NewNotePageState();
@@ -12,6 +14,7 @@ class NewNotePageState extends State<NewNotePage>{
   void initState() {
     // TODO: implement initState
     super.initState();
+    db.init();
     // Title_controller.addListener(() {
     //   print("Title: "+Title_controller.text);
     // });
@@ -19,15 +22,21 @@ class NewNotePageState extends State<NewNotePage>{
     //   print("Desc: "+Desc_controller.text);
     // });
   }
-  void onsubmit(){
-    print("Title is: " + Title_controller.text);
-    print("Description is: "+Desc_controller.text);
+  void onsubmit(BuildContext context){
+    String title = Title_controller.text;
+    String description = Desc_controller.text;
+    Note newnote = Note(title, description);
+    db.insertNote(newnote.toMap()).then((value){
+      Navigator.pop(context);
+    }
+    );
   }
   @override
   void dispose() {
     // TODO: implement dispose
     Title_controller.dispose();
     Desc_controller.dispose();
+    db.close();
     super.dispose();
   }
   @override
@@ -41,24 +50,24 @@ class NewNotePageState extends State<NewNotePage>{
           child:  Column(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8,vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 10),
                 child: TextField(
                   controller: Title_controller,
-                  maxLength: 10,
-                  decoration: InputDecoration(
+                  maxLength: 20,
+                  decoration: const InputDecoration(
                     label: Text("Title"),
                   ),
-                  style: TextStyle(fontSize: 23,),
+                  style: const TextStyle(fontSize: 23,),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8,vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 10),
                 child: TextField(
                   controller: Desc_controller,
                   maxLines: 2,
                   maxLength: 60,
-                  decoration: InputDecoration(
-                    label: const Text("Description"),
+                  decoration: const InputDecoration(
+                    label: Text("Description"),
                   ),
                   style: const TextStyle(fontSize: 20),
                 ),
@@ -68,7 +77,7 @@ class NewNotePageState extends State<NewNotePage>{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(onPressed:(){onsubmit();},
+                    ElevatedButton(onPressed:(){onsubmit(context);},
                         style: ElevatedButton.styleFrom(
                           elevation: 20,
                           padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 50),
